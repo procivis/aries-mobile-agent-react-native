@@ -115,7 +115,7 @@ function ListCredentials(props: IListCredentials) {
                       AppStyles.textWhite,
                       AppStyles.textBold
                     ]}>
-                    Driver's License
+                    {credential.schemaId ? credential.schemaId.match(/(.*?):([0-9]):([a-zA-Z .-_0-9]+):([a-z0-9._-]+)$/)[3] : 'New Credential'}
                   </Text>
                 </View>
                 <TouchableOpacity

@@ -39,6 +39,7 @@ function CurrentCredential(props) {
         </TouchableOpacity>
         {props.credential ? (
           <>
+          <ScrollView style={{width: '104%'}}>
             <View
               style={[
                 AppStyles.tableItem,
@@ -52,61 +53,41 @@ function CurrentCredential(props) {
                     AppStyles.textWhite,
                     AppStyles.textBold
                   ]}>
-                  Driver's License
-                </Text>
-              </View>
-            </View>
-            <View
-              style={[
-                AppStyles.tableItem,
-                Styles.tableItem,
-                Styles.tableSubItem,
-              ]}>
-              <View>
+                  {props.credential.schemaId ? props.credential.schemaId.match(/(.*?):([0-9]):([a-zA-Z .-_0-9]+):([a-z0-9._-]+)$/)[3] : 'New Credential'}</Text>
                 <Text
                   style={[
-                    {fontSize: 18},
-                    AppStyles.textBlack,
-                  ]}>
-                  <Text style={AppStyles.textBold}>Name: </Text>
-                  {props.credential.attributes.first_name} {props.credential.attributes.last_name}
+                    {fontSize: 14, top: 6},
+                    AppStyles.textWhite
+                  ]}
+                >
+                  {props.credential.attributes.issuer_name ? 'from ' + props.credential.attributes.issuer_name : null }
                 </Text>
               </View>
             </View>
-            <View
-              style={[
-                AppStyles.tableItem,
-                Styles.tableItem,
-                Styles.tableSubItem,
-              ]}>
-              <View>
-                <Text
+            {Object.entries(props.credential.attributes).map((attribute:any) => {
+              const capitalize = (x:any) => x.charAt(0).toUpperCase() + x.slice(1)
+              attribute[0] = capitalize(attribute[0])
+              return (
+                <View
                   style={[
-                    {fontSize: 18},
-                    AppStyles.textSecondary,
+                    AppStyles.tableItem,
+                    Styles.tableItem,
+                    Styles.tableSubItem
                   ]}>
-                  <Text style={AppStyles.textBold}>Gender: </Text>
-                  {props.credential.attributes.gender} 
-                </Text>
-              </View>
-            </View>
-            <View
-              style={[
-                AppStyles.tableItem,
-                Styles.tableItem,
-                Styles.tableSubItem,
-              ]}>
-              <View>
-                <Text
-                  style={[
-                    {fontSize: 18},
-                    AppStyles.textSecondary,
-                  ]}>
-                  <Text style={AppStyles.textBold}>Age: </Text>
-                  {props.credential.attributes.age} 
-                </Text>
-              </View>
-            </View>
+                  <View>
+                    <Text
+                      style={[
+                        {fontSize: 18},
+                        AppStyles.textBlack,
+                      ]}>
+                      <Text style={AppStyles.textBold}>{attribute[0]}: </Text>
+                      {attribute[1]}
+                    </Text>
+                  </View>
+                </View>
+              )
+            })}
+            </ScrollView>
           </>
         ) : null}
       </View>

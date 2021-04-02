@@ -66,9 +66,12 @@ function Workflow(props: IWorkflow) {
         let credentialToDisplay = {
           attributes,
           connectionId: event.credentialRecord.connectionId,
-          id: event.credentialRecord.id
+          id: event.credentialRecord.id,
+          fullRecord: event.credentialRecord,
+          full: event
         }
 
+        console.log('----------------------------------------')
         console.log("credentialToDisplay", credentialToDisplay)
 
         setCredential(credentialToDisplay)
@@ -76,7 +79,10 @@ function Workflow(props: IWorkflow) {
         setWorkflow('offered')
       //}
       
-    }
+    } 
+    // else if(event.credentialRecord.state === 'credential') {
+
+    // }
     else if(event.credentialRecord.state === 'credential-received'){
       console.log("attempting to send ack")
 
@@ -174,7 +180,7 @@ function Workflow(props: IWorkflow) {
                 source={Images.whiteHexCheck}
                 style={{
                   alignSelf: 'center',
-                  width: 102,
+                  width: 113,
                   height: 115,
                 }}
               />

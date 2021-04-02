@@ -106,7 +106,7 @@ function CredentialOffered(props: ICredentialOffered) {
                         AppStyles.textBold,
                       ]}>
                       {/*Temporary hardcoding*/}
-                      Driver's License
+                      New Credential
                     </Text>
                   </View>
                   <TouchableOpacity

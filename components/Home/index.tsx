@@ -27,6 +27,16 @@ function Home() {
   const errors = useContext(ErrorsContext)
   const notifications = useContext(NotificationsContext)
 
+  const mockCred = {
+    "attributes": {
+      "issuance_date": "mar 31, 2021", 
+      "issuer_name": "sopha", 
+      "message": "messg"
+    }, 
+    "connectionId": "6a640c11-3869-403a-b511-dbdaea14f5f9", 
+    "id": "cc4ac626-306a-4832-91e3-08f5b6a54abe"
+  }
+
   return (
     <>
       <BackButton backExit={true} />
