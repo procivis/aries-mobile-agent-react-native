@@ -16,7 +16,7 @@ import Images from '../../assets/images'
 import AppStyles from '../../assets/styles'
 
 import AgentContext from '../AgentProvider/'
-import { CredentialEventType } from 'aries-framework-javascript'
+import { CredentialEventType, ProofEventType } from 'aries-framework-javascript'
 
 import CredentialOffered from './Credential/Offered/index'
 import CredentialRequested from './Credential/Requested/index'
@@ -80,9 +80,6 @@ function Workflow(props: IWorkflow) {
       //}
       
     } 
-    // else if(event.credentialRecord.state === 'credential') {
-
-    // }
     else if(event.credentialRecord.state === 'credential-received'){
       console.log("attempting to send ack")
 
@@ -95,11 +92,24 @@ function Workflow(props: IWorkflow) {
     //TODO: Update Credentials List
   }
 
+  //Presentation Event
+  const handlePresentationStateChange = async (event) => {
+    console.log('- - - - EVENT: ', event)
+    const requestedCredential = await agentContext.agent.proofs.getRequestedCredentialsForProofRequest(event.proofRecord.requestMessage.indyProofRequest, undefined)
+    console.log('- - - - MESSAGE: ', event.proofRecord.requestMessage)
+    console.log('- - - - INDY MESSAGE: ', event.proofRecord.requestMessage.indyProofRequest)
+    console.log('- - - - REQUEST: ', requestedCredential)
+    agentContext.agent.proofs.acceptRequest(event.proofRecord.id, requestedCredential)
+    // setWorkflow('requested')
+  }
+
   //Register Event Listener
   useEffect(() => {
     if(!agentContext.loading){
       agentContext.agent.credentials.events.removeAllListeners(CredentialEventType.StateChanged)
+      agentContext.agent.proofs.events.removeAllListeners(ProofEventType.StateChanged)
       agentContext.agent.credentials.events.on(CredentialEventType.StateChanged, handleCredentialStateChange)
+      agentContext.agent.proofs.events.on(ProofEventType.StateChanged, handlePresentationStateChange)
     }
   }, [agentContext.loading])
 
@@ -148,6 +158,16 @@ function Workflow(props: IWorkflow) {
         path={`${url}/offered`}
         render={() => (
           <CredentialOffered
+            setWorkflow={setWorkflow}
+            contact={connection}
+            credential={credential}
+          />
+        )}
+      />
+      <Route
+        path={`${url}/requested`}
+        render={() => (
+          <CredentialRequested
             setWorkflow={setWorkflow}
             contact={connection}
             credential={credential}
