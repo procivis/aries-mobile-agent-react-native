@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext, useCallback } from 'react'
 
-import { downloadString, storeGenesis } from './utils'
+import { downloadString } from './utils'
 
 import {
   Agent,
@@ -174,10 +174,9 @@ const AgentProvider: React.FC<Props> = ({ agentConfig, mediatorUrl, genesisUrl, 
 
   const setInitialState = async () => {
     const mediatorConnectionsInvite = await downloadString(`${mediatorUrl}/invitation`)
-    const genesis = await downloadString(genesisUrl)
-    const genesisPath = await storeGenesis(genesis, 'genesis.txn')
+    const genesisTransactions = await downloadString(genesisUrl)
 
-    const agent = new Agent({ ...agentConfig, mediatorConnectionsInvite, genesisPath }, agentDependencies)
+    const agent = new Agent({ ...agentConfig, mediatorConnectionsInvite, genesisTransactions }, agentDependencies)
 
     const wsTransport = new WsOutboundTransporter()
     const httpTransport = new HttpOutboundTransporter()
